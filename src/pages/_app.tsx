@@ -2,14 +2,14 @@ import { ChakraProvider } from "@chakra-ui/react"
 
 import theme from "../styles/theme"
 import { AppProps } from "next/app"
-import { Wraper } from "../components/wraper"
+import { CurrencyContext } from "../contexts"
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider resetCSS theme={theme}>
-      <Wraper>
+      <CurrencyContext>
         <Component {...pageProps} />
-      </Wraper>
+      </CurrencyContext>
     </ChakraProvider>
   )
 }

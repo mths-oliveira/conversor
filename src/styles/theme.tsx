@@ -9,15 +9,14 @@ const breakpoints = createBreakpoints({
 })
 
 const theme = extendTheme({
-  colors: {
-    gray: {
-      dark: "#282828",
-      light: "#eeeeee",
-    },
-  },
   fonts: {
     body: `'Montserrat', sans-serif`,
     heading: `'Montserrat', sans-serif`,
+  },
+  colors: {
+    gray: {
+      dark: "#282828",
+    },
   },
   breakpoints,
 })

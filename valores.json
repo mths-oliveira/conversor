@@ -1,0 +1,16 @@
+{
+  "wol": {
+    "mensalidade": 132,
+    "mp": {
+      "mensalidade": 30
+    }
+  },
+  "live": {
+    "taxa": 250,
+    "mensalidade": 198,
+    "mp": {
+      "taxa": 60,
+      "mensalidade": 60
+    }
+  }
+}
