@@ -155,10 +155,9 @@ export default function () {
             <Box key={mes}>{capitalCase(mes)}</Box>
           ))}
           {valorPorMes.map((valor, i) => (
-            <Box key={i} fontWeight="bold">
-              {simbolosDasMoedas[moeda]}
-              {mascaraDeMoeda(valor)}
-            </Box>
+            <Text key={i} fontWeight="bold">
+              {`${simbolosDasMoedas[moeda]} ${mascaraDeMoeda(valor)}`}
+            </Text>
           ))}
         </Grid>
         <Stack as="form" spacing="2.5rem">
