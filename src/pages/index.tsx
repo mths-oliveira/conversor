@@ -156,6 +156,7 @@ export default function () {
           ))}
           {valorPorMes.map((valor, i) => (
             <Box key={i} fontWeight="bold">
+              {simbolosDasMoedas[moeda]}
               {mascaraDeMoeda(valor)}
             </Box>
           ))}
