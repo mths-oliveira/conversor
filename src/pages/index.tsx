@@ -1,5 +1,5 @@
 import valoresEmReais from "../../valores.json"
-import axios from "axios"
+
 import {
   Box,
   Checkbox,
@@ -9,7 +9,6 @@ import {
   Radio,
   RadioGroup,
   Stack,
-  Text,
 } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { Moeda, useCurrencyContext } from "../contexts"
@@ -83,7 +82,10 @@ export default function () {
         return month
       })
     setMeses(months)
-    getCurrencyValues().then(setCurrencyValues)
+    getCurrencyValues().then((a) => {
+      setCurrencyValues(a)
+      alert(JSON.stringify(a))
+    })
   }, [])
 
   useEffect(() => {
