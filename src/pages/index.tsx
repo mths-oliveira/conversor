@@ -23,10 +23,11 @@ async function getCurrencyValue(currency: Moeda) {
     euro: "EUR",
   }
   const abreviacaoDaMoeda = abreviacaoDasMoedas[currency]
-  const response = await axios.get(
+  const response = await fetch(
     `http://economia.awesomeapi.com.br/json/last/${abreviacaoDaMoeda}-BRL`
   )
-  const currencyValue = response.data[`${abreviacaoDaMoeda}BRL`].bid
+  const data = await response.json()
+  const currencyValue = data[`${abreviacaoDaMoeda}BRL`].bid
   return currencyValue
 }
 
