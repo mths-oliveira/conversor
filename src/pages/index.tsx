@@ -23,7 +23,7 @@ async function getCurrencyValue(currency: Moeda) {
   }
   const abreviacaoDaMoeda = abreviacaoDasMoedas[currency]
   const response = await fetch(
-    `http://economia.awesomeapi.com.br/json/last/${abreviacaoDaMoeda}-BRL`
+    `https://economia.awesomeapi.com.br/json/last/${abreviacaoDaMoeda}-BRL`
   )
   const data = await response.json()
   const currencyValue = data[`${abreviacaoDaMoeda}BRL`].bid
@@ -82,10 +82,7 @@ export default function () {
         return month
       })
     setMeses(months)
-    getCurrencyValues().then((a) => {
-      setCurrencyValues(a)
-      alert(JSON.stringify(a))
-    })
+    getCurrencyValues().then(setCurrencyValues)
   }, [])
 
   useEffect(() => {
