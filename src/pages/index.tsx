@@ -30,6 +30,16 @@ async function getCurrencyValue(currency: Moeda) {
   return currencyValue
 }
 
+async function getCurrencyValues() {
+  const dolar = await getCurrencyValue("dolar")
+  const euro = await getCurrencyValue("euro")
+  return {
+    real: 1,
+    dolar,
+    euro,
+  }
+}
+
 const produtosSelecionados = {
   wol: true,
   mp_wol: false,
@@ -51,6 +61,7 @@ export default function () {
   const [valorPorMes, setValorPorMes] = useState<number[]>([])
   const [meses, setMeses] = useState<string[]>([])
   const [currencyValues, setCurrencyValues] = useState(initialCurrencyValues)
+  const [value, setValue] = useState("0")
 
   const valorNosPrimeirosMeses = {
     wol: Array(3).fill(valores.wol.mensalidade),
@@ -71,15 +82,7 @@ export default function () {
         return month
       })
     setMeses(months)
-    ;(async () => {
-      const dolar = await getCurrencyValue("dolar")
-      const euro = await getCurrencyValue("euro")
-      setCurrencyValues({
-        dolar,
-        euro,
-        real: 1,
-      })
-    })()
+    getCurrencyValues().then(setCurrencyValues)
   }, [])
 
   useEffect(() => {
@@ -122,6 +125,11 @@ export default function () {
       bg="gray.dark"
       padding={["2.5rem 0", "2.5rem 0", "5rem 15rem"]}
       scrollSnapType="x mandatory"
+      onScroll={(e) => {
+        const children = e.currentTarget.childNodes[1] as HTMLDivElement
+        const { width, left } = children.getBoundingClientRect()
+        setValue(Number(width / 2 - left > 0).toString())
+      }}
     >
       <Stack
         width="100%"
@@ -257,6 +265,19 @@ export default function () {
           </TableRow>
         </Box>
       </Box>
+      <RadioGroup
+        value={value}
+        onChange={setValue}
+        position="fixed"
+        bottom="1.5rem"
+        pointerEvents="none"
+        display={["flex", "flex", "none"]}
+      >
+        <Flex justifyContent="center" width="100vw">
+          <Radio value="0" marginRight="0.5rem" size="sm" />
+          <Radio value="1" size="sm" />
+        </Flex>
+      </RadioGroup>
     </Flex>
   )
 }
