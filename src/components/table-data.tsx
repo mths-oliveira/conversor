@@ -6,6 +6,7 @@ export function TableData({ children, ...rest }: BoxProps) {
       display="table-cell"
       whiteSpace="nowrap"
       padding="0.75rem 1rem"
+      flexShrink={0}
       {...rest}
     >
       {children}

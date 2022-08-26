@@ -9,12 +9,19 @@ import {
   Radio,
   RadioGroup,
   Stack,
+  Text,
 } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { Moeda, useCurrencyContext } from "../contexts"
 import { mascaraDeMoeda } from "../utils/mascara-de-moeda"
 import { TableData } from "../components/table-data"
 import { TableRow } from "../components/table-row"
+
+const simbolosDasMoedas = {
+  dolar: "US$",
+  euro: "€",
+  real: "R$",
+}
 
 async function getCurrencyValue(currency: Moeda) {
   const abreviacaoDasMoedas = {
@@ -149,7 +156,7 @@ export default function () {
           ))}
           {valorPorMes.map((valor, i) => (
             <Box key={i} fontWeight="bold">
-              {mascaraDeMoeda(valor, moeda)}
+              {mascaraDeMoeda(valor)}
             </Box>
           ))}
         </Grid>
@@ -234,33 +241,55 @@ export default function () {
           <TableRow>
             <TableData width="100%">WOL</TableData>
             <TableData>
-              {mascaraDeMoeda(valores.wol.mensalidade, moeda)}
+              <Flex justifyContent="space-between">
+                <Text marginRight="0.25rem">{simbolosDasMoedas[moeda]}</Text>
+                <Text>{mascaraDeMoeda(valores.wol.mensalidade)}</Text>
+              </Flex>
             </TableData>
           </TableRow>
           <TableRow>
             <TableData>MP WOL</TableData>
             <TableData>
-              {mascaraDeMoeda(valores.wol.mp.mensalidade, moeda)}
+              <Flex justifyContent="space-between">
+                <Text marginRight="0.25rem">{simbolosDasMoedas[moeda]}</Text>
+                <Text>{mascaraDeMoeda(valores.wol.mp.mensalidade)}</Text>
+              </Flex>
             </TableData>
           </TableRow>
           <TableRow>
             <TableData>LIVE - Matrícula</TableData>
-            <TableData>{mascaraDeMoeda(valores.live.taxa, moeda)}</TableData>
+            <TableData>
+              <Flex justifyContent="space-between">
+                <Text marginRight="0.25rem">{simbolosDasMoedas[moeda]}</Text>
+                <Text>{mascaraDeMoeda(valores.live.taxa)}</Text>
+              </Flex>
+            </TableData>
           </TableRow>
           <TableRow>
             <TableData>LIVE - Mensalidade</TableData>
             <TableData>
-              {mascaraDeMoeda(valores.live.mensalidade, moeda)}
+              <Flex justifyContent="space-between">
+                <Text marginRight="0.25rem">{simbolosDasMoedas[moeda]}</Text>
+                <Text>{mascaraDeMoeda(valores.live.mensalidade)}</Text>
+              </Flex>
             </TableData>
           </TableRow>
           <TableRow>
             <TableData>MP LIVE - Matrícula</TableData>
-            <TableData>{mascaraDeMoeda(valores.live.mp.taxa, moeda)}</TableData>
+            <TableData>
+              <Flex justifyContent="space-between">
+                <Text marginRight="0.25rem">{simbolosDasMoedas[moeda]}</Text>
+                <Text>{mascaraDeMoeda(valores.live.mp.taxa)}</Text>
+              </Flex>
+            </TableData>
           </TableRow>
           <TableRow>
             <TableData>MP LIVE - Mensalidade</TableData>
             <TableData>
-              {mascaraDeMoeda(valores.live.mp.mensalidade, moeda)}
+              <Flex justifyContent="space-between">
+                <Text marginRight="0.25rem">{simbolosDasMoedas[moeda]}</Text>
+                <Text>{mascaraDeMoeda(valores.live.mp.mensalidade)}</Text>
+              </Flex>
             </TableData>
           </TableRow>
         </Box>
