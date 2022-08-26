@@ -1,4 +1,5 @@
 import valoresEmReais from "../../valores.json"
+import axios from "axios"
 import {
   Box,
   Checkbox,
@@ -16,10 +17,17 @@ import { mascaraDeMoeda } from "../utils/mascara-de-moeda"
 import { TableData } from "../components/table-data"
 import { TableRow } from "../components/table-row"
 
-const valoresDasMoedasEmRelacaoAoReal = {
-  dolar: 5.13,
-  euro: 5.12,
-  real: 1,
+async function getCurrencyValue(currency: Moeda) {
+  const abreviacaoDasMoedas = {
+    dolar: "USD",
+    euro: "EUR",
+  }
+  const abreviacaoDaMoeda = abreviacaoDasMoedas[currency]
+  const response = await axios.get(
+    `http://economia.awesomeapi.com.br/json/last/${abreviacaoDaMoeda}-BRL`
+  )
+  const currencyValue = response.data[`${abreviacaoDaMoeda}BRL`].bid
+  return currencyValue
 }
 
 const produtosSelecionados = {
@@ -29,11 +37,20 @@ const produtosSelecionados = {
   mp_live: false,
 }
 
+function capitalCase(text: string) {
+  const firstChar = text.charAt(0).toUpperCase()
+  const substring = text.substring(1).toLowerCase()
+  return firstChar + substring
+}
+
+const initialCurrencyValues = { real: 1, dolar: 1, euro: 1 }
+
 export default function () {
   const { valores, setValores, moeda, setMoeda } = useCurrencyContext()
   const [produtos, setProdutos] = useState(produtosSelecionados)
   const [valorPorMes, setValorPorMes] = useState<number[]>([])
   const [meses, setMeses] = useState<string[]>([])
+  const [currencyValues, setCurrencyValues] = useState(initialCurrencyValues)
 
   const valorNosPrimeirosMeses = {
     wol: Array(3).fill(valores.wol.mensalidade),
@@ -54,6 +71,15 @@ export default function () {
         return month
       })
     setMeses(months)
+    ;(async () => {
+      const dolar = await getCurrencyValue("dolar")
+      const euro = await getCurrencyValue("euro")
+      setCurrencyValues({
+        dolar,
+        euro,
+        real: 1,
+      })
+    })()
   }, [])
 
   useEffect(() => {
@@ -69,7 +95,7 @@ export default function () {
   }, [produtos, valores])
 
   useEffect(() => {
-    const valorDaMoeda = valoresDasMoedasEmRelacaoAoReal[moeda]
+    const valorDaMoeda = currencyValues[moeda]
     setValores({
       live: {
         mensalidade: valoresEmReais.live.mensalidade / valorDaMoeda,
@@ -111,12 +137,12 @@ export default function () {
           textAlign="center"
         >
           {meses.map((mes) => (
-            <Box key={mes} fontWeight="bold" textTransform="uppercase">
-              {mes}
-            </Box>
+            <Box key={mes}>{capitalCase(mes)}</Box>
           ))}
           {valorPorMes.map((valor, i) => (
-            <Box key={i}>{mascaraDeMoeda(valor, moeda)}</Box>
+            <Box key={i} fontWeight="bold">
+              {mascaraDeMoeda(valor, moeda)}
+            </Box>
           ))}
         </Grid>
         <Stack as="form" spacing="2.5rem">
@@ -188,7 +214,15 @@ export default function () {
         >
           Tabela de preços
         </Heading>
-        <Box display="table" height="fit-content">
+        <Box
+          display="table"
+          height="fit-content"
+          sx={{
+            "&>div>div:last-child": {
+              fontWeight: "bold",
+            },
+          }}
+        >
           <TableRow>
             <TableData width="100%">WOL</TableData>
             <TableData>
@@ -202,21 +236,21 @@ export default function () {
             </TableData>
           </TableRow>
           <TableRow>
-            <TableData>MATRÍCULA LIVE</TableData>
+            <TableData>LIVE - Matrícula</TableData>
             <TableData>{mascaraDeMoeda(valores.live.taxa, moeda)}</TableData>
           </TableRow>
           <TableRow>
-            <TableData>LIVE</TableData>
+            <TableData>LIVE - Mensalidade</TableData>
             <TableData>
               {mascaraDeMoeda(valores.live.mensalidade, moeda)}
             </TableData>
           </TableRow>
           <TableRow>
-            <TableData>MATRÍCULA MP LIVE</TableData>
+            <TableData>MP LIVE - Matrícula</TableData>
             <TableData>{mascaraDeMoeda(valores.live.mp.taxa, moeda)}</TableData>
           </TableRow>
           <TableRow>
-            <TableData>MP LIVE</TableData>
+            <TableData>MP LIVE - Mensalidade</TableData>
             <TableData>
               {mascaraDeMoeda(valores.live.mp.mensalidade, moeda)}
             </TableData>
